@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <title>Project 3</title>
+</head
+
+>
+<body>
+
+<header id="header">
+    <h1>Java Projects</h1>
+    <a href="images/Resume.pdf" class="logo">Resume</a>
+</header>
+
+<!-- Nav -->
+<nav id="nav">
+    <ul class="links">
+        <li class="active"><a href="index.html">Home</a></li>
+
+    </ul>
+    <ul class="icons">
+        <li><a href="https://github.com/CisNotSharp" class="icon brands fa-github">
+            <span class="label">GitHub</span></a></li>
+    </ul>
+</nav>
+<main id="main">
+    <article>
+        <header>
+
+            <h2>Canteen ordering system</h2><br/>
+
+        </header>
+        <a href="projectTwo.html" class="image fit"><img src="images/csharp.PNG" alt="converter" /></a>
+        <a href="projectTwo.html" class="image fit"><img src="images/unittest.PNG" alt="converter" /></a>
+        <p>Third Project is a canteen ordering system made in C# WPF. It lets you order items
+            and asks for options such as delivery,
+            receipt printing using File IO and unit testing.</p>
+        <h2>MainWindow File code</h2>
+        <pre>
+            using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace MP_CsharpAssessment
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+
+       public string Address { get; set; }
+       public string phone { get; set; }
+       public string fullname { get; set; }
+
+        public MainWindow()
+        {
+            InitializeComponent();
+
+        }
+
+        private void Button_Click()
+        {
+
+        }
+
+
+        /// summary
+        ///
+        ///Looks at selected item from the pizza
+        /// summary>
+        ///  name="sender">
+        /// name="e">
+        private void MenuItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(MenuItems.SelectedItem != null)
+            {
+                MenuItemspizza.SelectedItem = null;
+            }
+
+
+        }
+        /// summary
+        /// locates the file to load in the folder
+        /// ummary>
+        /// param name="sender">param>
+        /// param name="e">param>
+
+        private void View_pizza_Click(object sender, RoutedEventArgs e)
+        {
+            List lines = new Liststring();
+            using (StreamReader r = new StreamReader(@"E:\\MP-CsharpAssessment\\MP-CsharpAssessment\\bin\\Debug\\pizzamenu.txt"))
+            {
+                string line;
+                while ((line = r.ReadLine()) != null)
+                {
+                    string[] lineparts = line.Split(',');   // ==> ["Food"," Cheeseburger"," $3.50"]
+                    string part = lineparts[0].Trim();
+
+
+                    if(part == "Toppings")
+                    {
+                        pizzatopping.Items.Add(line);
+                    } else if (part == "Sauce")
+                    {
+                        pizzasauce.Items.Add(line);
+                    } else if(part == "Base")
+                    {
+                        MenuItemspizza.Items.Add(line);
+                    }
+
+
+
+
+                }
+
+            }
+            View_pizza.IsEnabled = false;
+
+        }
+        /// summary>
+        /// adds the select items and adds the prices together
+        /// /summary>
+        /// param name="sender"/param
+        /// param name="e"/param
+        private void Add_Selected_Click(object sender, RoutedEventArgs e)
+        {
+            if (MenuItems.SelectedItem != null)
+            {
+                object menuoption = MenuItems.SelectedItem;
+
+                OrderingList.Items.Add(menuoption);
+            }// calls objects from menuitem class
+            if (MenuItemspizza.SelectedItem != null && pizzasauce.SelectedItem != null && pizzatopping.SelectedItem != null) {
+                string[] pizzabase = MenuItemspizza.SelectedItem.ToString().Split(',');
+                string baseName = pizzabase[1].Trim();
+                string basePrice = pizzabase[2].Trim().Replace("$", "");
+                double basePricing;
+                double.TryParse(basePrice, out basePricing);
+
+                string[] sauce = pizzasauce.SelectedItem.ToString().Split(',');
+                string sauceName = sauce[1].Trim();
+                string saucePrice = sauce[2].Trim().Replace("$", "");
+                double saucePricing;
+                double.TryParse(saucePrice, out saucePricing);
+
+                string[] topping = pizzatopping.SelectedItem.ToString().Split(',');
+                string toppingName = topping[1].Trim();
+                string toppingPrice = topping[2].Trim().Replace("$", "");
+                double toppingPricing;
+                double.TryParse(toppingPrice, out toppingPricing);
+
+                string itemName = baseName + " " + toppingName + " (" + sauceName + ")";
+                double totalPrice = basePricing + toppingPricing + saucePricing;
+
+                pizza piz = new pizza(toppingName, baseName, sauceName, "pizza", itemName, totalPrice);
+
+                OrderingList.Items.Add(piz);
+
+            }
+        }
+        /// summary>
+        /// when program runs it will load in the menu available
+        /// /summary>
+        /// param name="sender">/param>
+        /// param name="e">/param>
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
+            Liststring lines = new Liststring();
+            using (StreamReader r = new StreamReader(@"E:\\MP-CsharpAssessment\\MP-CsharpAssessment\\bin\\Debug\\menu.txt"))
+            {
+                string line;
+                while ((line = r.ReadLine()) != null)
+                {
+
+                    string[] lineparts = line.Split(',');   // ==> ["Food"," Cheeseburger"," $3.50"]
+                    string type = lineparts[0].Trim();
+                    string name = lineparts[1].Trim();
+                    string price = lineparts[2].Trim().Replace("$", "");
+                    double pricing;
+                    double.TryParse(price,out pricing);
+
+                    // Create Menu object for this line
+                    MenuItem menuItem = new MenuItem(type, name, pricing);
+
+                    // Add to listbox
+                    MenuItems.Items.Add(menuItem);
+                }
+            }
+
+
+
+        }
+        /// summary>
+        /// calculates the price in a message box then asks for delivery
+        /// /summary>
+        /// param name="sender">/param>
+        /// param name="e">/param>
+        private void View_total_Click(object sender, RoutedEventArgs e)
+        {
+            double total = 0;
+            for (int i = 0; i < OrderingList.Items.Count; i++)
+            {
+                MenuItem item = (MenuItem)OrderingList.Items[i];
+                total += item.price;
+
+            }
+            //shows total and ask if they want to comfirm order
+
+            MessageBoxResult confirm = MessageBox.Show("Order total is $" + total.ToString() + "  Confirm order?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if(confirm == MessageBoxResult.No)
+            {
+                return;
+            }
+            // asks for delivery and opens new window
+            MessageBoxResult deliver = MessageBox.Show("Do you want delivery?", "Delivery", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if(deliver == MessageBoxResult.Yes)
+            {
+                address add = new address();
+                add.Owner = this;
+                add.ShowDialog();
+            }
+            PrintReciept();
+        }
+        /// summary
+        /// adds items from the pizza listbox when hightlighted
+        /// summary>
+        /// param name="sender">param>
+        /// param name="e">param>
+        private void Pizza_ItemSelect(object sender, SelectionChangedEventArgs e)
+        {
+            if (MenuItemspizza.SelectedItem != null)
+            {
+                MenuItems.SelectedItem = null;
+            }
+
+        }
+        /// summary
+        /// gets rid of items in text box
+        /// summary>
+        /// param name="sender"/param
+        /// param name="e"/param
+        private void Removedselected_Click(object sender, RoutedEventArgs e)
+        {
+            if (OrderingList.SelectedItem != null)
+            {
+                OrderingList.Items.Remove(OrderingList.SelectedItem);
+            }
+        }
+
+        private void Pizzatopping_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+        /// summary
+        /// writes the order to the file
+        /// /summary
+        private void PrintReciept()
+        {
+
+            StreamWriter sw = new StreamWriter("Order.txt");
+            sw.WriteLine("your order");
+          // counts items in the ordering box
+            for(int i =0; iOrderingList.Items.Count; i++)
+            {// writes them to the file
+                sw.WriteLine(OrderingList.Items[i]);
+
+            }// writes address to text file
+            if ( Address != null )
+            {
+                sw.WriteLine("Delivered to" + Address);
+            }
+            // writes phone to text file
+            if ( phone != null)
+            {
+                sw.WriteLine("Phone Number" + phone);
+            }
+            // writes name to text file
+            if (fullname != null)
+            {
+                sw.WriteLine("Full Name" + fullname);
+            }
+            // closes
+            sw.Close();
+        }
+    }
+}
+
+        </pre>
+
+    </article>
+  <article>
+        <header>
+
+            <h2>User admin managing system</h2><br/>
+
+        </header>
+        <a href="projectTwo.html" class="image fit"><img src="images/csharp2.PNG" alt="converter" /></a>
+        <p>Forth project is a User system that lets you add users edit details and
+            approve admin requirements
+            . this is a project I'm still polishing. Created with C# and MYSQL.</p>
+      <h2>MainWindow file code</h2>
+        <pre>
+
+            using MahApps.Metro.Controls;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using System.Data;
+using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
+
+namespace deleteingandadding
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : MetroWindow
+    {
+        public string server;
+        public string database;
+        public string uid;
+        public string password;
+        public string name = "From Main";
+
+
+        public MainWindow()
+        {
+            InitializeComponent();
+
+            try
+            {
+
+            SQLconnection();
+
+            } catch(SqlException e)
+
+            {
+                MessageBox.Show("Error with database" + e);
+            }
+
+
+            var data = new Data();
+            data.Id = 1;
+            data.Name = "John";
+            data.Username = "C++";
+            data.Password = "javascript";
+            data.Email = "goprogram@gmail.com";
+            dtGrid.Items.Add(data);
+
+        }
+
+        public void SQLconnection()
+        {
+            server = "localhost";
+            database = "test_db";
+            uid = "test_user";
+            password = "password1";
+
+            string connectionString =
+
+            "SERVER=" + server + ";"
+            + "DATABASE=" +
+             database + ";" +
+             "UID=" + uid + ";" +
+             "PASSWORD=" +
+             password + ";";
+
+            SqlConnection con = new SqlConnection(connectionString);
+
+            SqlCommand cmd = new SqlCommand("Select * from users", con);
+
+            con.Open();
+
+            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+
+            DataTable dt = new DataTable();
+
+            adapter.Fill(dt);
+
+            dtGrid.ItemsSource = dt.DefaultView;
+
+            cmd.Dispose();
+
+            con.Close();
+
+            EditWindow edit = new EditWindow();
+
+            if(dtGrid.SelectedItem.ToString() != "")
+            {
+                edit.Show();
+            } else
+            {
+
+            }
+
+        }
+
+        private void CloseMenu_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void EditMenu_Click(object sender, RoutedEventArgs e)
+        {
+            EditWindow edit = new EditWindow();
+            edit.Owner = this;
+
+        }
+
+        private void AddMenu_Click(object sender, RoutedEventArgs e)
+        {
+            AddWindow add = new AddWindow();
+            add.Show();
+
+        }
+
+        private void RemoveMenu_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AboutMenu_Click(object sender, RoutedEventArgs e)
+        {
+            AboutWindow about = new AboutWindow();
+            about.Show();
+        }
+
+        private void FilterButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void AdminMenu_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+    }
+    public class Data
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string Email { get; set; }
+
+    }
+}
+
+
+
+        </pre>
+      <h2>Add user code</h2>
+<pre>
+
+    public partial class AddWindow : Window
+    {
+        MainWindow window = new MainWindow();
+
+        public AddWindow()
+        {
+            InitializeComponent();
+            window.Owner = this;
+        }
+
+        private void AddSave_Click(object sender, RoutedEventArgs e)
+        {
+            window.server = "localhost";
+            window.database = "test_db";
+            window.uid = "test_user";
+            window.password = "password1";
+
+            string connectionString =
+                "SERVER = " + window.server + ";"
+                + "DATABASE = " + window.database + ";"
+                + "UID = " + window.uid + ";"
+                + "PASSWORD = " +
+                window.password + ";";
+
+            SqlConnection con = new SqlConnection(connectionString);
+            try
+            {
+             con.Open();
+            string query = "INSERT INTO duck_user(Name_e, Username_e, Password_e, Email_e) VALUES(@n, @u, @p, @e)";
+            SqlCommand cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@n", AddName.Text);
+            cmd.Parameters.AddWithValue("@u", AddUsername.Text);
+            cmd.Parameters.AddWithValue("@p", AddPassword.Text);
+            cmd.Parameters.AddWithValue("@e", AddEmail.Text);
+            con.Close();
+
+            } catch(SqlException ex)
+            {
+                con.Close();
+                MessageBox.Show("Add something went wrong" + ex);
+            }
+
+
+        }
+    }
+}
+</pre>
+
+    </article>
+
+    <article>
+    <a href="projectTwo.html" class="image fit"><img src="images/fleetmanagement.PNG" alt="converter" /></a>
+    <p>C# program that tracks vehicles and important usages like fuel, distance travel and need of service</p>
+    <h2>Fleet Management System</h2>
+
+    <pre>
+
+        /*
+using System.Data;
+using System.Data.SqlClient;
+using System.Windows;
+using WPFUI.Views;
+namespace WPFUI.Models
+{
+
+    class sqlsetting
+    {
+        public string server { get; set; }
+        public string database { get; set; }
+        public string uid { get; set; }
+        public string password { get; set; }
+        public SqlConnection con { get; set; }
+        public SqlCommand cmd { get; set; }
+
+        ShellView shell = new ShellView();
+        Addwin add = new Addwin();
+        EditWindow edit = new EditWindow();
+        fuelPurchase fuel = new fuelPurchase();
+        Rentalwindow rental = new Rentalwindow();
+        serviceWin service = new serviceWin();
+        public sqlsetting()
+        {
+
+        }
+
+        public void SQLconnection()
+        {
+            try
+            {
+                server = "localhost";
+                database = "fleetmanagment";
+                uid = "fleet_manage";
+                password = "Password1";
+
+                string connectionString =
+                    "SERVER=" + server + ";" +
+                    "DATABASE=" + database + ";" +
+                    "UID=" + uid + ";" +
+                    "PASSWORD=" +
+                    password + ";";
+                con = new SqlConnection(connectionString);
+                cmd = new SqlCommand("SELECT * FROM vehicle;", con);
+
+                con.Open();
+
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+
+                DataTable dt = new DataTable();
+
+                adapter.Fill(dt);
+                shell.GridElement.ItemsSource = dt.DefaultView;
+                cmd.Dispose();
+                con.Close();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("SQL ERROR" + ex);
+            }
+
+
+        }
+        public void SQLDeleteQurry()
+        {
+            server = "localhost";
+            database = "fleetmanagment";
+            uid = "fleet_manage";
+            password = "Password1";
+
+            string connectionString =
+                "SERVER=" + server + ";" +
+                "DATABASE=" + database + ";" +
+                "UID=" + uid + ";" +
+                "PASSWORD=" +
+                password + ";";
+            con = new SqlConnection(connectionString);
+            con.Open();
+            cmd = new SqlCommand("DELETE FROM vehicle" + "WHERE" +
+             "@selected", con);
+            cmd.Parameters.AddWithValue("@selected", shell.GridElement.SelectedItems.Count > 0);
+            con.Close();
+
+        }
+
+        public void SQLAddQurry()
+        {
+            server = "localhost";
+            database = "fleetmanagment";
+            uid = "fleet_manage";
+            password = "Password1";
+
+            string connectionString =
+                "SERVER=" + server + ";" +
+                "DATABASE=" + database + ";" +
+                "UID=" + uid + ";" +
+                "PASSWORD=" +
+                password + ";";
+            con = new SqlConnection(connectionString);
+            con.Open();
+            string query = "INSERT INTO vehicle(make, model, release_year, registration, fuel, tank_size)";
+            query += "VALUES (@make, @model, @release_year, @registration, @fuel, @tank_size)";
+
+            cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@make", add.SecondChildManufact.Text);
+            cmd.Parameters.AddWithValue("@model", add.SecondChildModel.Text);
+            cmd.Parameters.AddWithValue("@release_year", add.SecondChildYear.Text);
+            cmd.Parameters.AddWithValue("@registration", add.RegisterView.Text);
+            cmd.Parameters.AddWithValue("@fuel", add.OdometerView.Text);
+            cmd.Parameters.AddWithValue("@tank_size", add.TankCapacityView.Text);
+
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+
+        public void SQLEditQurry()
+        {
+            server = "localhost";
+            database = "fleetmanagment";
+            uid = "fleet_manage";
+            password = "Password1";
+
+            string connectionString =
+                "SERVER=" + server + ";" +
+                "DATABASE=" + database + ";" +
+                "UID=" + uid + ";" +
+                "PASSWORD=" +
+                password + ";";
+            con = new SqlConnection(connectionString);
+            con.Open();
+            string query = "UPDATE vehicle SET make = @make, model = @model, release_year = @release_year, registration = @registration, fuel = @fuel, tank_size = @tank_size";
+            cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@make", edit.EditManuFact.Text);
+            cmd.Parameters.AddWithValue("@model", edit.EditModel.Text);
+            cmd.Parameters.AddWithValue("@release_year", edit.EditMake.Text);
+            cmd.Parameters.AddWithValue("@registation", edit.RegisterView.Text);
+            cmd.Parameters.AddWithValue("@fuel", edit.OdometerView.Text);
+            cmd.Parameters.AddWithValue("@tank_size", edit.TankCapacityView.Text);
+            con.Close();
+        }
+
+        public void SQLJourneyQurry()
+        {
+            server = "localhost";
+            database = "fleetmanagment";
+            uid = "fleet_manage";
+            password = "Password1";
+
+            string connectionString =
+                "SERVER=" + server + ";" +
+                "DATABASE=" + database + ";" +
+                "UID=" + uid + ";" +
+                "PASSWORD=" +
+                password + ";";
+            con = new SqlConnection(connectionString);
+            cmd = new SqlCommand("SELECT * FROM journey;", con);
+
+            con.Open();
+
+            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+
+            DataTable dt = new DataTable();
+
+            adapter.Fill(dt);
+            shell.GridElement.ItemsSource = dt.DefaultView;
+            cmd.Dispose();
+            con.Close();
+        }
+
+        public void SQLserviceQuery()
+        {
+            server = "localhost";
+            database = "fleetmanagment";
+            uid = "fleet_manage";
+            password = "Password1";
+
+            string connectionString =
+                "SERVER=" + server + ";" +
+                "DATABASE=" + database + ";" +
+                "UID=" + uid + ";" +
+                "PASSWORD=" +
+                password + ";";
+            con = new SqlConnection(connectionString);
+            string query = "INSERT INTO service(vehicle_id, odometer, service_at)";
+            query += "VALUES (@vehicle_id, @odometer, @service_at)";
+
+            con.Open();
+
+            cmd = new SqlCommand(query, con);
+
+            cmd.Parameters.AddWithValue("@vehicle_id", service.VehicleService.SelectedItem.ToString());
+            cmd.Parameters.AddWithValue("@odometer", service.OdometerService.Text);
+
+
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+
+        public void SearchService()
+        {
+            server = "localhost";
+            database = "fleetmanagment";
+            uid = "fleet_manage";
+            password = "Password1";
+            string connectionString =
+            "SERVER=" + server + ";" +
+            "DATABASE=" + database + ";" +
+            "UID=" + uid + ";" +
+            "PASSWORD=" +
+             password + ";";
+            con = new SqlConnection(connectionString);
+            con.Open();
+            string searchquery = "SELECT FROM vehicle WHERE model";
+            SqlCommand searchcmd = new SqlCommand(searchquery, con);
+            SqlDataAdapter adapter = new SqlDataAdapter(searchcmd);
+            DataTable dt = new DataTable();
+            service.VehicleService.ItemsSource = dt.DefaultView;
+
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+        public void SQLrentQuery()
+        {
+            server = "localhost";
+            database = "fleetmanagment";
+            uid = "fleet_manage";
+            password = "Password1";
+
+            string connectionString =
+                "SERVER=" + server + ";" +
+                "DATABASE=" + database + ";" +
+                "UID=" + uid + ";" +
+                "PASSWORD=" +
+                password + ";";
+            con = new SqlConnection(connectionString);
+            con.Open();
+            string query = "SELECT FROM vehicle WHERE model = @model AND make = @make ";
+
+            cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@model", rental.VehicleRent.Text);
+            cmd.Parameters.AddWithValue("@make", rental.VehicleRent.Text);
+
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+
+        public void SQLfuelQuery()
+        {
+            server = "localhost";
+            database = "fleetmanagment";
+            uid = "fleet_manage";
+            password = "Password1";
+
+            string connectionString =
+                "SERVER=" + server + ";" +
+                "DATABASE=" + database + ";" +
+                "UID=" + uid + ";" +
+                "PASSWORD=" +
+                password + ";";
+            con = new SqlConnection(connectionString);
+
+            string query = "INSERT INTO fuel_purchase(amount, cost)";
+            query += "VALUES (@amount, @cost)";
+
+            cmd = new SqlCommand(query, con);
+            con.Open();
+            cmd.Parameters.AddWithValue("@amount", fuel.FuelAmount.Text);
+            cmd.Parameters.AddWithValue("@cost", fuel.FuelCost.Text);
+
+
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+
+        public void SQLvehicleIDfuel()
+        {
+            server = "localhost";
+            database = "fleetmanagment";
+            uid = "fleet_manage";
+            password = "Password1";
+
+            string connectionString =
+                "SERVER=" + server + ";" +
+                "DATABASE=" + database + ";" +
+                "UID=" + uid + ";" +
+                "PASSWORD=" +
+                password + ";";
+            con = new SqlConnection(connectionString);
+            cmd = new SqlCommand("SELECT * FROM fuel_purchase;", con);
+
+            con.Open();
+
+            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+
+            DataTable dt = new DataTable();
+
+            adapter.Fill(dt);
+            fuel.FuelVehicle_id.ItemsSource = dt.DefaultView;
+            cmd.Dispose();
+            con.Close();
+        }
+    }
+}
+*/
+
+    </pre>
+        <h2>Classes</h2>
+        <pre>
+            /*
+using System.Data;
+using System.Data.SqlClient;
+using System.Windows;
+using WPFUI.Views;
+namespace WPFUI.Models
+{
+
+    class sqlsetting
+    {
+        public string server { get; set; }
+        public string database { get; set; }
+        public string uid { get; set; }
+        public string password { get; set; }
+        public SqlConnection con { get; set; }
+        public SqlCommand cmd { get; set; }
+
+        ShellView shell = new ShellView();
+        Addwin add = new Addwin();
+        EditWindow edit = new EditWindow();
+        fuelPurchase fuel = new fuelPurchase();
+        Rentalwindow rental = new Rentalwindow();
+        serviceWin service = new serviceWin();
+        public sqlsetting()
+        {
+
+        }
+
+        public void SQLconnection()
+        {
+            try
+            {
+                server = "localhost";
+                database = "fleetmanagment";
+                uid = "fleet_manage";
+                password = "Password1";
+
+                string connectionString =
+                    "SERVER=" + server + ";" +
+                    "DATABASE=" + database + ";" +
+                    "UID=" + uid + ";" +
+                    "PASSWORD=" +
+                    password + ";";
+                con = new SqlConnection(connectionString);
+                cmd = new SqlCommand("SELECT * FROM vehicle;", con);
+
+                con.Open();
+
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+
+                DataTable dt = new DataTable();
+
+                adapter.Fill(dt);
+                shell.GridElement.ItemsSource = dt.DefaultView;
+                cmd.Dispose();
+                con.Close();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("SQL ERROR" + ex);
+            }
+
+
+        }
+        public void SQLDeleteQurry()
+        {
+            server = "localhost";
+            database = "fleetmanagment";
+            uid = "fleet_manage";
+            password = "Password1";
+
+            string connectionString =
+                "SERVER=" + server + ";" +
+                "DATABASE=" + database + ";" +
+                "UID=" + uid + ";" +
+                "PASSWORD=" +
+                password + ";";
+            con = new SqlConnection(connectionString);
+            con.Open();
+            cmd = new SqlCommand("DELETE FROM vehicle" + "WHERE" +
+             "@selected", con);
+            cmd.Parameters.AddWithValue("@selected", shell.GridElement.SelectedItems.Count > 0);
+            con.Close();
+
+        }
+
+        public void SQLAddQurry()
+        {
+            server = "localhost";
+            database = "fleetmanagment";
+            uid = "fleet_manage";
+            password = "Password1";
+
+            string connectionString =
+                "SERVER=" + server + ";" +
+                "DATABASE=" + database + ";" +
+                "UID=" + uid + ";" +
+                "PASSWORD=" +
+                password + ";";
+            con = new SqlConnection(connectionString);
+            con.Open();
+            string query = "INSERT INTO vehicle(make, model, release_year, registration, fuel, tank_size)";
+            query += "VALUES (@make, @model, @release_year, @registration, @fuel, @tank_size)";
+
+            cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@make", add.SecondChildManufact.Text);
+            cmd.Parameters.AddWithValue("@model", add.SecondChildModel.Text);
+            cmd.Parameters.AddWithValue("@release_year", add.SecondChildYear.Text);
+            cmd.Parameters.AddWithValue("@registration", add.RegisterView.Text);
+            cmd.Parameters.AddWithValue("@fuel", add.OdometerView.Text);
+            cmd.Parameters.AddWithValue("@tank_size", add.TankCapacityView.Text);
+
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+
+        public void SQLEditQurry()
+        {
+            server = "localhost";
+            database = "fleetmanagment";
+            uid = "fleet_manage";
+            password = "Password1";
+
+            string connectionString =
+                "SERVER=" + server + ";" +
+                "DATABASE=" + database + ";" +
+                "UID=" + uid + ";" +
+                "PASSWORD=" +
+                password + ";";
+            con = new SqlConnection(connectionString);
+            con.Open();
+            string query = "UPDATE vehicle SET make = @make, model = @model, release_year = @release_year, registration = @registration, fuel = @fuel, tank_size = @tank_size";
+            cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@make", edit.EditManuFact.Text);
+            cmd.Parameters.AddWithValue("@model", edit.EditModel.Text);
+            cmd.Parameters.AddWithValue("@release_year", edit.EditMake.Text);
+            cmd.Parameters.AddWithValue("@registation", edit.RegisterView.Text);
+            cmd.Parameters.AddWithValue("@fuel", edit.OdometerView.Text);
+            cmd.Parameters.AddWithValue("@tank_size", edit.TankCapacityView.Text);
+            con.Close();
+        }
+
+        public void SQLJourneyQurry()
+        {
+            server = "localhost";
+            database = "fleetmanagment";
+            uid = "fleet_manage";
+            password = "Password1";
+
+            string connectionString =
+                "SERVER=" + server + ";" +
+                "DATABASE=" + database + ";" +
+                "UID=" + uid + ";" +
+                "PASSWORD=" +
+                password + ";";
+            con = new SqlConnection(connectionString);
+            cmd = new SqlCommand("SELECT * FROM journey;", con);
+
+            con.Open();
+
+            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+
+            DataTable dt = new DataTable();
+
+            adapter.Fill(dt);
+            shell.GridElement.ItemsSource = dt.DefaultView;
+            cmd.Dispose();
+            con.Close();
+        }
+
+        public void SQLserviceQuery()
+        {
+            server = "localhost";
+            database = "fleetmanagment";
+            uid = "fleet_manage";
+            password = "Password1";
+
+            string connectionString =
+                "SERVER=" + server + ";" +
+                "DATABASE=" + database + ";" +
+                "UID=" + uid + ";" +
+                "PASSWORD=" +
+                password + ";";
+            con = new SqlConnection(connectionString);
+            string query = "INSERT INTO service(vehicle_id, odometer, service_at)";
+            query += "VALUES (@vehicle_id, @odometer, @service_at)";
+
+            con.Open();
+
+            cmd = new SqlCommand(query, con);
+
+            cmd.Parameters.AddWithValue("@vehicle_id", service.VehicleService.SelectedItem.ToString());
+            cmd.Parameters.AddWithValue("@odometer", service.OdometerService.Text);
+
+
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+
+        public void SearchService()
+        {
+            server = "localhost";
+            database = "fleetmanagment";
+            uid = "fleet_manage";
+            password = "Password1";
+            string connectionString =
+            "SERVER=" + server + ";" +
+            "DATABASE=" + database + ";" +
+            "UID=" + uid + ";" +
+            "PASSWORD=" +
+             password + ";";
+            con = new SqlConnection(connectionString);
+            con.Open();
+            string searchquery = "SELECT FROM vehicle WHERE model";
+            SqlCommand searchcmd = new SqlCommand(searchquery, con);
+            SqlDataAdapter adapter = new SqlDataAdapter(searchcmd);
+            DataTable dt = new DataTable();
+            service.VehicleService.ItemsSource = dt.DefaultView;
+
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+        public void SQLrentQuery()
+        {
+            server = "localhost";
+            database = "fleetmanagment";
+            uid = "fleet_manage";
+            password = "Password1";
+
+            string connectionString =
+                "SERVER=" + server + ";" +
+                "DATABASE=" + database + ";" +
+                "UID=" + uid + ";" +
+                "PASSWORD=" +
+                password + ";";
+            con = new SqlConnection(connectionString);
+            con.Open();
+            string query = "SELECT FROM vehicle WHERE model = @model AND make = @make ";
+
+            cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@model", rental.VehicleRent.Text);
+            cmd.Parameters.AddWithValue("@make", rental.VehicleRent.Text);
+
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+
+        public void SQLfuelQuery()
+        {
+            server = "localhost";
+            database = "fleetmanagment";
+            uid = "fleet_manage";
+            password = "Password1";
+
+            string connectionString =
+                "SERVER=" + server + ";" +
+                "DATABASE=" + database + ";" +
+                "UID=" + uid + ";" +
+                "PASSWORD=" +
+                password + ";";
+            con = new SqlConnection(connectionString);
+
+            string query = "INSERT INTO fuel_purchase(amount, cost)";
+            query += "VALUES (@amount, @cost)";
+
+            cmd = new SqlCommand(query, con);
+            con.Open();
+            cmd.Parameters.AddWithValue("@amount", fuel.FuelAmount.Text);
+            cmd.Parameters.AddWithValue("@cost", fuel.FuelCost.Text);
+
+
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+
+        public void SQLvehicleIDfuel()
+        {
+            server = "localhost";
+            database = "fleetmanagment";
+            uid = "fleet_manage";
+            password = "Password1";
+
+            string connectionString =
+                "SERVER=" + server + ";" +
+                "DATABASE=" + database + ";" +
+                "UID=" + uid + ";" +
+                "PASSWORD=" +
+                password + ";";
+            con = new SqlConnection(connectionString);
+            cmd = new SqlCommand("SELECT * FROM fuel_purchase;", con);
+
+            con.Open();
+
+            SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+
+            DataTable dt = new DataTable();
+
+            adapter.Fill(dt);
+            fuel.FuelVehicle_id.ItemsSource = dt.DefaultView;
+            cmd.Dispose();
+            con.Close();
+        }
+    }
+}
+*/
+            -------------------------------
+
+
+             public class Service
+    {
+        public static readonly int SERVICE_KILOMETER_LIMIT = 10000;
+
+        private int lastServiceOdometerKm = 0;
+        private int serviceCount = 0;
+        private DateTime lastServiceDate;
+
+        public int getLastServiceOdometerKm()
+        {
+            return this.lastServiceOdometerKm;
+        }
+        public DateTime LastServicedate
+        {
+            get
+            {
+                return lastServiceDate;
+            }
+            set
+            {
+                lastServiceDate = value;
+            }
+        }
+
+        /// <summary>
+        /// The function recordService expects the total distance traveled by the car,
+        /// saves it and increase serviceCount. distance
+        /// </summary>
+
+        public void recordService(int distance)
+        {
+            this.lastServiceOdometerKm = distance;
+            this.serviceCount++;
+        }
+
+        // return how many services the car has had
+        public int getServiceCount()
+        {
+            return this.serviceCount;
+        }
+
+        /// <summary>
+        /// Calculates the total services by dividing kilometers by
+        /// SERVICE_KILOMETER_LIMIT and floors the value.
+        ///
+        ///  the number of services needed per SERVICE_KILOMETER_LIMIT
+        /// </summary>
+        public int getTotalScheduledServices()
+        {
+            return (int)Math.Floor((double)(lastServiceOdometerKm / SERVICE_KILOMETER_LIMIT));
+        }
+    }
+            ----------------------------
+
+             public class Journey
+    {
+        private double kilometers;
+
+        // class constructor
+        public Journey()
+        {
+            this.kilometers = 0;
+        }
+        /// <summary>
+        /// Appends the distance parameter to {@link #kilometers}
+        /// param kilometers the distance traveled
+        /// </summary>
+
+        public void addKilometers(double kilometers)
+        {
+            this.kilometers += kilometers;
+        }
+
+
+
+        /// <summary>
+        /// Getter method for total Kilometers traveled in this journey.
+        /// kilometers
+        /// </summary>
+        public double getKilometers()
+        {
+            return kilometers;
+        }
+
+    }
+            ---------------------
+
+               public class FuelPurchase
+    {
+        private double fuelEconomy;
+        private double litres = 0;
+        private double cost = 0;
+
+        public double getFuelEconomy()
+        {
+            return fuelEconomy;
+            //return this.cost / this.litres;
+        }
+
+        public double getFuel()
+        {
+            return this.litres;
+        }
+
+        public void setFuelEconomy(double fuelEconomy)
+        {
+            this.fuelEconomy = fuelEconomy;
+        }
+        public void purchaseFuel(double amount, double price)
+        {
+            this.litres += amount;
+            this.cost += price;
+        }
+    }
+            --------------------
+              public class RegisterVehicle : Screen
+    {
+
+        // Rental Per kilometer $1, per km increase
+        // Rental Per Day 100km
+
+
+        public double TravelledKm { get; set; }
+        public double CostPerDay = 100;
+        public double CostPerKm = 1;
+        public int amountofday { get; set; }
+
+        public bool inService = true;
+
+
+
+
+
+    }
+
+            --------------------
+
+        </pre>
+    </article>
+
+
+</main>
+
+</body>
+</html>

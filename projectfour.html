@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <title>Cpp project</title>
+</head>
+<body>
+<main id="main">
+<article>
+    <header>
+
+        <h2>Memory address threading</h2><br/>
+
+    </header>
+    <p>C++ project that takes input and return memory addresses</p>
+<img src="images/cpparray.PNG" alt="converter" />
+
+    <pre>
+
+void cApp::myvector() {
+
+	cApp c;
+
+	//c.vectorNum = { 1, 2, 3, 4 };
+
+	//int* arr[] = { &c.vectorNum };
+
+	//std::cout << "Pointer to values in vector " << c.vectorNum2().push_back;
+
+	int total;
+
+	std::vector  vec = { 1, 2, 3 };
+
+	vec.push_back(4);
+	vec.push_back(5);
+	vec.push_back(6);
+
+	std::vector vec2 = (vec);
+
+	if (std::equal( vec2.begin(), vec2.end(), vec)) {
+
+		std::cout << "Content is equal";
+
+		for (int i = 0; i < vec2.push_back; i++) {
+			std::cout << "Added vector numbers to total " << "\n";
+			total += vec2.push_back;
+		}
+		try {
+
+			int i[5];
+			std::vector  j (i, i+10);
+			std::sort(j.begin(), j.end()+5);
+
+			std::vector  vec3;
+			std::vector  vec4(vec3.begin(), vec3.end());
+			std::sort(vec3.begin(), vec3.end());
+			std::cout << "Enter an array of numbers" << "\n";
+
+			std::cin >> vec4.push_back;
+
+			if (vec4.push_back.capacity != 8) {
+				std::cout << "Please try again must enter 8 different numbers" << "\n";
+				c.myvector();
+
+			}
+			else {
+				std::cout << "added value of the 8 entered numbers is..." << "\n";
+				int value;
+				for (int i = 0; i < vec4.push_back; i++) {
+					value += vec4.push_back[i];
+					std::cout << "Total value: -- writeing to file press Enter " << value;
+
+					if (GetAsyncKeyState(VK_RETURN)) {
+						try {
+							std::ifstream val("pointer.txt");
+
+							if (val.is_open) {
+								val >> value;
+								val.close;
+							}
+
+							}
+						catch (std::ifstream::failure e) {
+							std::cerr << "Exception thrown" << e.what();
+
+							}
+				}
+
+				}
+			}
+			std::cout << "Enter 8 different numbers again to return them as pointers" << "\n";
+			int *e[1];
+			int s;
+			e[1] = ;
+
+			std::vector  *point;
+			std::vector  *point2 = (point->begin, point->end);
+
+			std::cout << "Enter values for memory address return" << "\n";
+
+			std::cin >> *point->push_back;
+
+			if (*point->capacity != 8) {
+				std::cout << "Enter 8 different numbers to reveal memory address" << "\n";
+				c.myvector();
+			}
+			else {
+				std::cout << "Displayed address for 8 different integers" << "\n";
+
+				int pointvalue;
+				for (int i = 0; &i < point->push_back; i++) {
+
+					pointvalue = &point->push_back[&i];
+
+					std::sort(*point->begin, *point->end);
+
+					std::cout << "Memory " << &pointvalue[&i] << std::endl;
+
+				}
+			}
+
+		}
+		catch(std::exception &e) {
+			std::cout << "Something went wrong" <<
+			e.what();
+		}
+		std::cout << "Creating list..." <<  "\n";
+		Sleep(3000);
+		std::cout << "List is created" << "\n";
+
+		c.mylist();
+
+		std::cout << "Enter numbers for the list" << "\n";
+
+		std::cin >> c.mylist().push_back;
+		switch (c.mylist().push_back) {
+		case 1:
+			if (c.mylist().begin(), c.mylist().end(), +0 <= 0)
+				std::cout << "Invalid operation list cannot hold 0 values";
+			break;
+		case 2:
+			if (c.mylist().push_back.size == 8) {
+				std::list  list_two;
+				list_two.push_back = c.mylist().push_back;
+				std::cout << "List is made" << list_two.push_back << "\n";
+			}
+			break;
+		default:
+			std::cout << "Invalid" << "\n";
+		}
+
+
+	}
+
+    </pre>
+
+</article><article>
+    <header>
+
+        <h2>Gui C++</h2><br/>
+
+    </header>
+    <p>C++ GUI program that introduces sockets still working on progressing this
+	program only have recently started</p>
+<img src="images/api.PNG" alt="converter" />
+<pre>
+	#include "cMain.h"
+#define FILE_MENU_NEW 1
+#define FILE_MENU_HELP 2;
+#define FILE_MENU_ABOUT 3;
+// Window Proc
+LRESULT CALLBACK WindowProcedure(HWND, UINT, WPARAM, LPARAM);
+
+void AddMenus(HWND);
+
+
+HMENU hmenu;
+
+int WINAPI WinMain(HINSTANCE hInst, HINSTANCE
+	hPrevInst, LPSTR args, int ncmdshow) {
+
+	// WNDCLASSW is a struct so asign is 0
+	WNDCLASSW wc = { 0 };
+	// window creation
+	wc.hbrBackground = (HBRUSH)COLOR_WINDOW;
+	wc.hCursor = (HCURSOR)LoadCursor(NULL, IDC_ARROW);
+	wc.hInstance = hInst;
+	wc.lpszClassName = L"WindowClass";
+	wc.lpszMenuName = L"Main Window";
+	wc.lpfnWndProc = WindowProcedure;
+
+	// if window wasnt created
+	if (!RegisterClassW(&wc)) {
+		return -1;
+	}
+
+	CreateWindowW(L"WindowClass", L"Main Window",
+		WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+		100, 100, 500, 500,
+		NULL, NULL, NULL, NULL);
+
+	// struct asign 0
+	MSG msg = { 0 };
+
+	while (GetMessage(&msg, NULL, NULL, NULL)) {
+		TranslateMessage(&msg);
+		DispatchMessageW(&msg);
+	}
+
+	return 0;
+}
+
+LRESULT CALLBACK WindowProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
+	switch (msg) {
+	case WM_COMMAND:
+
+		switch (wp) {
+		case 1:
+			MessageBeep(MB_OK);
+			MessageBox(hWnd, L"Help clicked", L"Help", MB_HELP);
+			break;
+		case 2:
+			MessageBeep(MB_OK);
+			MessageBox(hWnd, L"About clicked", L"About", MB_OK);
+			break;
+		}
+
+		break;
+	case WM_CREATE:
+		AddMenus(hWnd);
+		break;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+	default :
+		return DefWindowProcW(hWnd, msg, wp, lp);
+	}
+}
+
+void AddMenus(HWND hWnd) {
+
+	hmenu = CreateMenu();
+	HMENU hFileMenu = CreateMenu();
+
+	// drop down from file
+	AppendMenu(hFileMenu, MF_STRING, FILE_MENU_NEW, L"New");
+	AppendMenu(hFileMenu, MF_STRING, FILE_MENU_NEW, L"Open");
+	AppendMenu(hFileMenu, MF_STRING, FILE_MENU_NEW, L"Save");
+	AppendMenu(hFileMenu, MF_STRING, FILE_MENU_NEW, L"Exit");
+
+	// Main Menu
+	AppendMenu(hmenu, MF_POPUP, (UINT_PTR)hFileMenu, L"File");
+
+	// Helpers in Main
+	AppendMenu(hmenu, MF_STRING, FILE_MENU_HELP, L"Help");
+	AppendMenu(hmenu, MF_STRING, 3, L"About");
+
+	SetMenu(hWnd, hmenu);
+
+}
+
+
+</pre>
+
+</article>
+</main>
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <title>Project One</title>
+</head>
+<body>
+<header id="header">
+    <h1>Java Projects</h1>
+    <a href="images/Resume.pdf" class="logo">Resume</a>
+</header>
+
+<!-- Nav -->
+<nav id="nav">
+    <ul class="links">
+        <li class="active"><a href="index.html">Home</a></li>
+
+    </ul>
+    <ul class="icons">
+        <li><a href="https://github.com/CisNotSharp" class="icon brands fa-github">
+            <span class="label">GitHub</span></a></li>
+    </ul>
+</nav>
+
+<main id="main">
+    <article>
+        <header>
+
+            <h2>Converter</h2><br/>
+
+        </header>
+        <a href="projectOne.html" class="image fit"><img src="images/java1.PNG" alt="converter" /></a>
+        <p>First Project is a Java project I created that converts Fahrenheit it
+            Celsius and Aud to Usd. This was one of
+            my projects I created</p>
+        <pre>
+            package temperatureconverter;
+
+            import java.net.URL;
+            import java.util.ResourceBundle;
+
+            import javafx.collections.FXCollections;
+            import javafx.collections.ObservableList;
+            import javafx.event.ActionEvent;
+            import javafx.fxml.FXML;
+            import javafx.fxml.Initializable;
+            import javafx.scene.control.Alert;
+            import javafx.scene.control.Button;
+            import javafx.scene.control.ChoiceBox;
+
+            import javafx.scene.control.Label;
+            import javafx.scene.control.ListView;
+            import javafx.scene.control.TextField;
+
+            public class FXMLDocumentController implements Initializable {
+    // Scenebuilder controls
+    @FXML
+    private TextField input;
+    @FXML
+    private TextField output;
+    @FXML
+    private ListView String ListView;
+
+    @FXML
+    private Label Message;
+    @FXML
+    private ChoiceBox String ChoiceBox;
+    @FXML
+    private Button btnConvert;
+
+
+
+
+  //Button action control
+    @FXML
+    private void handleButtonAction(ActionEvent event) {
+        //declare
+
+       // Gets value from what someone inputs
+         String strNum = input.getText();
+
+
+
+         // Gets value when selecting what conversion you want
+         String TYPE = ChoiceBox.getValue();
+         // Catches errors input
+       try {
+           // Calculates results
+         double result = 0;
+        // Converts double to
+         double num  = Double.valueOf(strNum);
+         //double num2 = Double.valueOf(TYPE);
+
+
+
+         // Calulating centimetres to inches
+
+         if(TYPE == "Length (centimetres <--> inches)") {
+           //calulate cm
+         result = num / 2.54;
+
+         // Calculating Fahrenheit to Celsius
+         }
+         else if(TYPE == "Temperature (Fahrenheit <--> Celcius)") {
+         // calulate temperature
+             result = ((num -32 ) *5) / 9;
+         }
+         // Calculating kilograms to pounds
+         else if (TYPE == "Weight (kilograms <--> pounds)") {
+             // calculate weight
+             result = num /  2.205;
+         }
+         // Calculating Days to minutes
+         if(TYPE == "Time (days <--> minutes)") {
+             // calculate days to minutes
+             result = num * 1440;
+         }
+         // Calculating AUD to USD
+         else if (TYPE == "Currency as at a fixed date (AUD <--> USD)") {
+             // calculate AUD to USD
+             result = num * 1.1135;
+         }
+         // displays result
+         output.setText( Double.toString(result) );
+       //display results in listview control
+     ListView.getItems().add( "Calculation" + result + output);
+       } catch (NumberFormatException e) {
+
+           // Displays error when typing error
+           Alert a = new Alert(javafx.scene.control.Alert.AlertType.ERROR, "Invalid");
+       }
+        }
+
+    @Override
+
+    //list Array of differnet conversion options
+    public void initialize(URL url, ResourceBundle rb) { // Values
+         ObservableListString Convert = FXCollections.observableArrayList("Length (centimetres <--> inches)",
+                 "Temperature (Fahrenheit <--> Celcius)", "Weight (kilograms <--> pounds)", "Time (days <--> minutes)",
+                 "Currency as at a fixed date (AUD <--> USD)");
+        // Implmenting value into the choicebox to be selected
+        ChoiceBox.setItems(Convert); // Values
+        ObservableListString ConvertList = FXCollections.observableArrayList("Length (centimetres <--> inches)",
+                 "Temperature (Fahrenheit <--> Celcius)", "Weight (kilograms <--> pounds)", "Time (days <--> minutes)",
+                 "Currency as at a fixed date (AUD <--> USD)");
+
+
+
+    }
+
+
+}
+
+        </pre>
+
+    </article>
+
+    <article>
+        <header>
+
+            <h2>Lotto</h2><br/>
+
+        </header>
+        <a href="projectOne.html" class="image fit"><img src="images/java2.PNG" alt="converter" /></a>
+        <p>Second Project is a Java project again where I created a GUI lotto game using
+            File IO skills and Junit testing</p>
+        <pre>
+            import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.RandomAccessFile;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.ResourceBundle;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
+import static javax.swing.JOptionPane.showMessageDialog;
+
+/**
+ *
+ * @author idk
+ */
+
+/**
+ * FXML Controller that holds the controls
+ * @author j393430
+ */
+public class FXMLDocumentController implements Initializable {
+
+    int[] winnig;
+    @FXML
+    private Label label;
+    @FXML
+    private Button btnfile;
+    @FXML
+    private TextField number2;
+    @FXML
+    private TextField number3;
+    @FXML
+    private TextField number4;
+    @FXML
+    private TextField number5;
+    @FXML
+    private TextField number6;
+    @FXML
+    private TextField number1;
+    @FXML
+    private TextField number7;
+    /**
+     *  returns prize amount
+     * @param matches number of matching numbers
+     * @return
+     */
+    public int prize(int matches) {
+
+        return matches *10;
+
+
+}
+    /**
+     * Handles when user clicks button
+     * @param event
+     * @throws IOException
+     */
+    @FXML
+    private void handleButtonAction(ActionEvent event) throws IOException {
+
+        //Getting Values inputed in the 7 boxes
+       // getText to get the input from the user
+        String[] result = new String[] {number1.getText(), number2.getText(), number3.getText(), number4.getText(), number5.getText(),
+        number6.getText(), number7.getText()};
+        int[] usernum = new int[7];
+
+        // validating the inputs
+        //counts all the inputs in the boxes
+        for(int d = 0; d < result.length; d++) {
+            int numallow;
+            //catchs the errror
+            try{
+
+                  numallow = Integer.parseInt(result[d]);
+            } catch ( Exception e) {
+                // tells the user not to enter text
+                showMessageDialog(null, "Please no text");
+                return;
+            }
+           // returns errors if lower or higher
+            if(numallow <  1 || numallow > 99  ) {
+                // tells the user not to enter numbers more than 99 and less than 1
+                showMessageDialog(null, "Please enter numbers 1 to 99 only");
+                return;
+            }
+
+            usernum[d] = numallow;
+
+        }
+        // sorts numbers
+        Arrays.sort(usernum);
+        // asks to get rid of duplicates
+        for ( int b = 0; b < usernum.length-1; b++) {
+            if(usernum[b] == usernum[b+1]) {
+
+                // tells user no duplicates
+                showMessageDialog(null, "No Duplicates");
+                return;
+            }
+        }
+
+
+
+        // creating file
+    PrintWriter outfile = new PrintWriter("winning.txt");
+    // counts the length of usernum
+    for(int s =0; s < usernum.length; s++) {
+         outfile.println(usernum[s]);
+
+
+    }
+
+//binary searches matching numbers in winning numbers
+    outfile.close();
+    //
+      int count = 0;
+      // counts length of the usernum
+      for (int i = 0; i < usernum.length; i++) {
+          // binary searches for the winning numbers
+          int search = Arrays.binarySearch(winnig, usernum[i]);
+
+          if(search >= 0) {
+              // increase number
+              count++;
+          }
+      }
+        // tells user amount they have won
+      int amount = prize(count);
+      // notifys the user amount they won
+      showMessageDialog(null, "You won $" + amount);
+
+
+
+
+
+
+    }
+
+    /**
+     * initialize for creating the lotto numbers
+     * @param url
+     * @param rb
+     */
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+      // declaring the winning numbers
+
+        winnig= new int[7];
+        try {
+            Scanner inFile = new Scanner (new FileReader("winning.txt"));
+            inFile.nextInt();
+            for (int lotto = 0; lotto < winnig.length; lotto++) {
+            winnig[lotto] = inFile.nextInt();
+        }// random numbers if not found
+         } catch (FileNotFoundException ex) {
+             // creates a random number file for user to guess
+            Random ran = new Random();
+            for(int z =0; z < winnig.length; z++) {
+                winnig[z] = ran.nextInt(99)+1;
+            }
+
+        }
+
+
+
+    }
+
+             }
+        </pre>
+
+    </article>
+
+</main>
+
+<footer>
+
+</footer>
+</body>
+</html>
